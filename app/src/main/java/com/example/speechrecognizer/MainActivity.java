@@ -9,12 +9,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.cloud.translate.Detection;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView result;
+    private TextView speechResult;
+    private TextView languageResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClick(View view) {
         if(view.getId() == R.id.micButton) {
-            result = (TextView) findViewById(R.id.speechText);
+            speechResult = (TextView) findViewById(R.id.speechText);
+            languageResult = (TextView) findViewById(R.id.languageText);
             promptSpeechInput();
         }
     }
@@ -50,9 +56,18 @@ public class MainActivity extends AppCompatActivity {
             case 100:
                 if(resultCode == RESULT_OK && intent != null) {
                     List<String> speechResult = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    result.setText(speechResult.get(0));
+                    this.speechResult.setText(speechResult.get(0));
+//                    LanguageIdentifier languageIdentifier = new LanguageIdentifier(speechResult.get(0));
+//                    this.languageResult.setText(languageIdentifier.getLanguage());
+                    Translate translate = TranslateOptions.newBuilder().build().getService();
+                    String detectedLanguages = "";
+                    List<Detection> detections = translate.detect(ImmutableList.of(speechResult.get(0)));
+                    for(Detection detection : detections) {
+                        detectedLanguages += detection.getLanguage() + " - ";
+                    }
+                    this.languageResult.setText(detectedLanguages);
                 }
-//                break;
+//              break;
         }
     }
 
