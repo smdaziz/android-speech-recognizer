@@ -37,7 +37,6 @@
         app:layout_constraintTop_toBottomOf="@+id/languageText" />
 
     <TextView
-        android:id="@+id/micButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

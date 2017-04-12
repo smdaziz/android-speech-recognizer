@@ -59,13 +59,17 @@ public class MainActivity extends AppCompatActivity {
                     this.speechResult.setText(speechResult.get(0));
 //                    LanguageIdentifier languageIdentifier = new LanguageIdentifier(speechResult.get(0));
 //                    this.languageResult.setText(languageIdentifier.getLanguage());
-                    Translate translate = TranslateOptions.newBuilder().build().getService();
-                    String detectedLanguages = "";
-                    List<Detection> detections = translate.detect(ImmutableList.of(speechResult.get(0)));
-                    for(Detection detection : detections) {
-                        detectedLanguages += detection.getLanguage() + " - ";
+                    try {
+                        Translate translate = TranslateOptions.newBuilder().build().getService();
+                        String detectedLanguages = "";
+                        List<Detection> detections = translate.detect(ImmutableList.of(speechResult.get(0)));
+                        for(Detection detection : detections) {
+                            detectedLanguages += detection.getLanguage() + " - ";
+                        }
+                        this.languageResult.setText(detectedLanguages);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    this.languageResult.setText(detectedLanguages);
                 }
 //              break;
         }
